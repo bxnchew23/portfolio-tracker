@@ -3,209 +3,568 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio Tracker — Tan Gim Suan</title>
+<title>Portfolio — Tan Gim Suan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
+/* ── Reset & Root ──────────────────────────────────────────── */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bg: #0d1117; --surface: #161b22; --surface2: #21262d;
-  --border: #30363d; --text: #c9d1d9; --muted: #8b949e;
-  --green: #3fb950; --red: #f85149; --blue: #58a6ff;
-  --accent: #00e676; --gold: #ffd700;
+  --bg:       #f0f4f8;
+  --surface:  #ffffff;
+  --surface2: #f8fafc;
+  --border:   #e2e8f0;
+  --border2:  #cbd5e1;
+  --text:     #1e293b;
+  --muted:    #64748b;
+  --muted2:   #94a3b8;
+  --green:    #16a34a;
+  --green-bg: #f0fdf4;
+  --green-b:  #bbf7d0;
+  --red:      #dc2626;
+  --red-bg:   #fef2f2;
+  --red-b:    #fecaca;
+  --blue:     #2563eb;
+  --blue-bg:  #eff6ff;
+  --blue-b:   #bfdbfe;
+  --accent:   #2563eb;
+  --gold:     #d97706;
+  --gold-bg:  #fffbeb;
+  --shadow-sm:   0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:   0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
+  --shadow-lg:   0 10px 24px rgba(0,0,0,.10), 0 4px 8px rgba(0,0,0,.06);
+  --radius:   12px;
+  --radius-sm: 8px;
+  --radius-xs: 6px;
 }
-body { background:var(--bg); color:var(--text); font-family:'Courier New',monospace; font-size:13px; min-height:100vh; }
-#loadingBar { position:fixed; top:0; left:0; height:2px; background:var(--accent); width:0; transition:width .4s; z-index:9999; }
-nav { background:var(--surface); border-bottom:1px solid var(--border); padding:0 24px; display:flex; align-items:center; justify-content:space-between; height:52px; position:sticky; top:0; z-index:100; }
-.logo { color:var(--accent); font-size:15px; font-weight:700; letter-spacing:.06em; }
-.nav-right { display:flex; align-items:center; gap:16px; }
-.market-status { font-size:11px; color:var(--muted); display:flex; align-items:center; gap:6px; }
-.status-dot { width:7px; height:7px; border-radius:50%; background:var(--green); display:inline-block; }
-.status-dot.closed { background:var(--red); }
-.import-badge { font-size:10px; background:#1a2a1a; border:1px solid var(--accent); color:var(--accent); padding:3px 10px; border-radius:20px; }
 
-.summary { display:grid; grid-template-columns:repeat(4,1fr); background:var(--surface); border-bottom:1px solid var(--border); }
-.stat { padding:16px 24px; border-right:1px solid var(--border); }
-.stat:last-child { border-right:none; }
-.stat-label { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; margin-bottom:6px; }
-.stat-value { font-size:20px; font-weight:700; color:var(--text); }
-.stat-value.up { color:var(--green); } .stat-value.dn { color:var(--red); }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
 
-.tabs { display:flex; background:var(--surface); border-bottom:1px solid var(--border); padding:0 24px; }
-.tab { padding:12px 20px; font-size:11px; color:var(--muted); cursor:pointer; border:none; background:none; border-bottom:2px solid transparent; font-family:'Courier New',monospace; text-transform:uppercase; letter-spacing:.08em; transition:color .15s; }
-.tab:hover { color:var(--text); } .tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+/* ── Loading bar ───────────────────────────────────────────── */
+#loadingBar {
+  position: fixed; top: 0; left: 0; height: 3px;
+  background: linear-gradient(90deg, var(--accent), #60a5fa);
+  width: 0; transition: width .4s; z-index: 9999;
+  border-radius: 0 2px 2px 0;
+}
 
-.content { padding:24px; }
-.panel { display:none; } .panel.active { display:block; }
+/* ── Nav ────────────────────────────────────────────────────── */
+nav {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 60px;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+.logo {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 17px; font-weight: 700; color: var(--text); letter-spacing: -.02em;
+}
+.logo-icon {
+  width: 32px; height: 32px; background: var(--accent);
+  border-radius: 8px; display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 15px; font-weight: 700;
+}
+.nav-right { display: flex; align-items: center; gap: 12px; }
+.account-badge {
+  font-size: 12px; font-weight: 500;
+  background: var(--blue-bg); color: var(--blue);
+  border: 1px solid var(--blue-b);
+  padding: 5px 12px; border-radius: 20px;
+}
+.market-pill {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 500; color: var(--muted);
+  background: var(--surface2); border: 1px solid var(--border);
+  padding: 5px 12px; border-radius: 20px;
+}
+.status-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--green); display: inline-block;
+}
+.status-dot.closed { background: var(--red); }
 
-.action-bar { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px; }
-.action-left { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
-.btn { background:transparent; border:1px solid var(--border); color:var(--text); padding:7px 16px; font-size:11px; font-family:'Courier New',monospace; cursor:pointer; border-radius:4px; text-transform:uppercase; letter-spacing:.06em; transition:all .15s; }
-.btn:hover { border-color:var(--accent); color:var(--accent); }
-.btn.accent { border-color:var(--accent); color:var(--accent); }
-.btn:disabled { opacity:.4; cursor:not-allowed; }
-.last-updated { font-size:11px; color:var(--muted); }
+/* ── Currency toggle ────────────────────────────────────────── */
+.ccy-toggle {
+  display: flex; align-items: center;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 20px; padding: 3px; gap: 2px;
+}
+.ccy-btn {
+  padding: 4px 14px; font-size: 12px; font-weight: 600;
+  font-family: inherit; border: none; background: transparent;
+  color: var(--muted); border-radius: 16px; cursor: pointer;
+  transition: all .15s;
+}
+.ccy-btn.active {
+  background: var(--accent); color: white;
+  box-shadow: 0 1px 3px rgba(37,99,235,.3);
+}
+.ccy-btn:not(.active):hover { color: var(--text); }
 
-.currency-group { margin-bottom:24px; }
-.currency-header { display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
-.currency-label { font-size:10px; text-transform:uppercase; letter-spacing:.12em; font-weight:700; padding:3px 10px; border-radius:3px; }
-.currency-label.usd { background:#1a2633; color:var(--blue); border:1px solid #1e3a52; }
-.currency-label.sgd { background:#1a2a1a; color:var(--accent); border:1px solid #1e4a2e; }
-.currency-total { font-size:11px; color:var(--muted); }
+/* ── Page wrapper ───────────────────────────────────────────── */
+.page { max-width: 1200px; margin: 0 auto; padding: 28px 24px; }
 
-.table-wrap { border:1px solid var(--border); border-radius:6px; overflow:hidden; overflow-x:auto; }
-table { width:100%; border-collapse:collapse; min-width:680px; }
-thead { background:var(--surface); }
-th { padding:9px 12px; text-align:right; font-weight:400; color:var(--muted); text-transform:uppercase; font-size:10px; letter-spacing:.08em; border-bottom:1px solid var(--border); white-space:nowrap; }
-th:first-child { text-align:left; }
-td { padding:11px 12px; text-align:right; border-bottom:1px solid var(--surface2); font-size:12px; }
-td:first-child { text-align:left; }
-tr:last-child td { border-bottom:none; } tr:hover td { background:var(--surface2); }
-.ticker-cell { color:var(--accent); font-weight:700; font-size:13px; }
-.name-cell { font-size:10px; color:var(--muted); margin-top:2px; }
-.up { color:var(--green); } .dn { color:var(--red); } .muted { color:var(--muted); }
-.usd-equiv { font-size:10px; color:var(--muted); margin-top:2px; }
+/* ── Summary cards ──────────────────────────────────────────── */
+.summary-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  margin-bottom: 24px;
+}
+.stat-card {
+  background: var(--surface); border-radius: var(--radius);
+  padding: 20px 24px; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+.stat-label {
+  font-size: 11px; font-weight: 600; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .07em; margin-bottom: 8px;
+}
+.stat-value {
+  font-size: 24px; font-weight: 700; color: var(--text); letter-spacing: -.02em;
+}
+.stat-value.up { color: var(--green); }
+.stat-value.dn { color: var(--red); }
+.stat-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.stat-alt { font-size: 11px; color: var(--muted2); margin-top: 3px; }
 
-.empty { text-align:center; padding:64px 24px; }
-.empty-icon { font-size:32px; margin-bottom:12px; opacity:.3; }
-.empty-title { font-size:14px; color:var(--text); margin-bottom:6px; }
-.empty-sub { font-size:12px; color:var(--muted); }
-.empty-btn { margin-top:16px; }
+/* ── Main card ───────────────────────────────────────────────── */
+.main-card {
+  background: var(--surface); border-radius: var(--radius);
+  box-shadow: var(--shadow-md); border: 1px solid var(--border);
+  overflow: hidden;
+}
 
-.tx-wrap { border:1px solid var(--border); border-radius:6px; overflow:hidden; overflow-x:auto; }
-.tx-head, .tx-row { display:grid; grid-template-columns:64px 90px 110px 90px 90px 110px 50px 36px; padding:10px 14px; align-items:center; font-size:12px; min-width:680px; }
-.tx-head { background:var(--surface); border-bottom:1px solid var(--border); font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; }
-.tx-row { border-bottom:1px solid var(--surface2); transition:background .1s; }
-.tx-row:last-child { border-bottom:none; } .tx-row:hover { background:var(--surface2); }
-.tx-type-buy { color:var(--green); font-weight:700; } .tx-type-sell { color:var(--red); font-weight:700; }
-.cur-badge { display:inline-block; font-size:9px; padding:1px 5px; border-radius:2px; font-weight:700; }
-.cur-badge.usd { background:#1a2633; color:var(--blue); } .cur-badge.sgd { background:#1a2a1a; color:var(--accent); }
-.del-btn { background:none; border:none; color:var(--muted); cursor:pointer; font-size:13px; padding:2px 5px; border-radius:3px; transition:all .15s; font-family:monospace; }
-.del-btn:hover { color:var(--red); background:#f8514920; }
+/* ── Tabs ───────────────────────────────────────────────────── */
+.tabs {
+  display: flex; border-bottom: 1px solid var(--border);
+  padding: 0 24px; gap: 4px;
+}
+.tab {
+  padding: 14px 18px; font-size: 13px; font-weight: 500;
+  color: var(--muted); cursor: pointer; border: none; background: none;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  transition: color .15s, border-color .15s; letter-spacing: -.01em;
+}
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-icon { margin-right: 6px; }
 
-.form-section { max-width:580px; }
-.section-label { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; margin-bottom:18px; padding-bottom:10px; border-bottom:1px solid var(--border); }
-.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-.form-group { display:flex; flex-direction:column; gap:6px; } .form-group.full { grid-column:1/-1; }
-.form-label { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; }
-.form-group input, .form-group select { background:var(--surface); border:1px solid var(--border); color:var(--text); padding:9px 12px; font-size:13px; font-family:'Courier New',monospace; border-radius:4px; transition:border-color .15s; }
-.form-group input:focus, .form-group select:focus { outline:none; border-color:var(--accent); }
-.form-group select option { background:var(--surface); }
-.form-group input::placeholder { color:var(--muted); }
-.type-toggle { display:flex; }
-.type-btn { flex:1; padding:9px; text-align:center; border:1px solid var(--border); cursor:pointer; font-size:12px; font-family:'Courier New',monospace; letter-spacing:.08em; background:var(--surface); color:var(--muted); transition:all .15s; }
-.type-btn:first-child { border-radius:4px 0 0 4px; } .type-btn:last-child { border-radius:0 4px 4px 0; border-left:none; }
-.type-btn.buy.active { background:#1c3a28; border-color:var(--green); color:var(--green); }
-.type-btn.sell.active { background:#3a1c1c; border-color:var(--red); color:var(--red); }
-.form-actions { display:flex; gap:10px; margin-top:4px; }
-.form-hint { font-size:11px; color:var(--muted); margin-top:14px; line-height:1.6; }
+/* ── Panel content ───────────────────────────────────────────── */
+.panel { display: none; }
+.panel.active { display: block; }
+.panel-inner { padding: 24px; }
 
-.info-box { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--gold); border-radius:4px; padding:12px 16px; margin-bottom:20px; font-size:11px; color:var(--muted); line-height:1.8; }
-.info-box strong { color:var(--gold); }
-.info-box code { background:var(--surface2); padding:1px 5px; border-radius:3px; font-family:'Courier New',monospace; color:var(--blue); font-size:11px; }
+/* ── Action bar ─────────────────────────────────────────────── */
+.action-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
+}
+.action-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.action-right { font-size: 12px; color: var(--muted); }
 
-.spinner { display:inline-block; width:11px; height:11px; border:2px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin .6s linear infinite; vertical-align:-1px; margin-right:5px; }
-@keyframes spin { to { transform:rotate(360deg); } }
-#toast { position:fixed; bottom:24px; right:24px; background:var(--surface); border:1px solid var(--border); padding:11px 18px; border-radius:6px; font-size:12px; color:var(--text); opacity:0; transition:opacity .25s; pointer-events:none; z-index:9999; max-width:320px; }
-#toast.show { opacity:1; } #toast.success { border-color:var(--green); color:var(--green); } #toast.error { border-color:var(--red); color:var(--red); }
-::-webkit-scrollbar { width:6px; height:6px; } ::-webkit-scrollbar-track { background:var(--bg); } ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+/* ── Buttons ─────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px; font-size: 13px; font-weight: 500;
+  font-family: inherit; border-radius: var(--radius-xs);
+  cursor: pointer; transition: all .15s; border: 1px solid transparent;
+}
+.btn-primary {
+  background: var(--accent); color: white; border-color: var(--accent);
+  box-shadow: 0 1px 3px rgba(37,99,235,.3);
+}
+.btn-primary:hover { background: #1d4ed8; border-color: #1d4ed8; }
+.btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+.btn-outline {
+  background: var(--surface); color: var(--text);
+  border-color: var(--border2);
+  box-shadow: var(--shadow-sm);
+}
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+.btn-ghost { background: none; color: var(--muted); border-color: transparent; }
+.btn-ghost:hover { color: var(--red); background: var(--red-bg); }
+.btn-danger { background: var(--red-bg); color: var(--red); border-color: var(--red-b); }
+.btn-danger:hover { background: var(--red); color: white; }
+
+/* ── Currency groups ─────────────────────────────────────────── */
+.currency-group { margin-bottom: 28px; }
+.currency-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 12px; flex-wrap: wrap;
+}
+.currency-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .08em; padding: 4px 10px; border-radius: 20px;
+}
+.currency-label.usd { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-b); }
+.currency-label.sgd { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-b); }
+.currency-total { font-size: 13px; color: var(--muted); font-weight: 500; }
+
+/* ── Table ────────────────────────────────────────────────────── */
+.table-wrap { border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 720px; }
+thead { background: var(--surface2); }
+th {
+  padding: 11px 14px; text-align: right; font-size: 11px; font-weight: 600;
+  color: var(--muted); text-transform: uppercase; letter-spacing: .06em;
+  border-bottom: 1px solid var(--border); white-space: nowrap;
+}
+th:first-child { text-align: left; }
+td {
+  padding: 14px 14px; text-align: right; font-size: 13px;
+  border-bottom: 1px solid var(--border); vertical-align: middle;
+}
+td:first-child { text-align: left; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--surface2); }
+.ticker-cell { font-size: 14px; font-weight: 700; color: var(--text); }
+.name-cell { font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 400; }
+.up { color: var(--green); font-weight: 500; }
+.dn { color: var(--red); font-weight: 500; }
+.muted { color: var(--muted); }
+.usd-equiv { font-size: 11px; color: var(--muted2); margin-top: 2px; }
+
+/* ── Empty state ─────────────────────────────────────────────── */
+.empty { text-align: center; padding: 64px 24px; }
+.empty-icon { font-size: 40px; margin-bottom: 16px; opacity: .25; }
+.empty-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+.empty-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+
+/* ── Transactions ─────────────────────────────────────────────── */
+.tx-wrap { border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; overflow-x: auto; }
+.tx-head, .tx-row {
+  display: grid;
+  grid-template-columns: 72px 100px 110px 90px 100px 120px 60px 40px;
+  padding: 12px 16px; align-items: center; font-size: 13px; min-width: 700px;
+}
+.tx-head {
+  background: var(--surface2); border-bottom: 1px solid var(--border);
+  font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em;
+}
+.tx-row { border-bottom: 1px solid var(--border); transition: background .1s; }
+.tx-row:last-child { border-bottom: none; }
+.tx-row:hover { background: var(--surface2); }
+.tx-type-buy {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  padding: 3px 8px; border-radius: 4px;
+  background: var(--green-bg); color: var(--green); border: 1px solid var(--green-b);
+}
+.tx-type-sell {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  padding: 3px 8px; border-radius: 4px;
+  background: var(--red-bg); color: var(--red); border: 1px solid var(--red-b);
+}
+.cur-badge {
+  display: inline-block; font-size: 10px; font-weight: 600;
+  padding: 2px 7px; border-radius: 10px;
+}
+.cur-badge.usd { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-b); }
+.cur-badge.sgd { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-b); }
+.del-btn {
+  background: none; border: none; color: var(--muted2);
+  cursor: pointer; font-size: 14px; padding: 4px 8px;
+  border-radius: 6px; transition: all .15s;
+}
+.del-btn:hover { color: var(--red); background: var(--red-bg); }
+
+/* ── Add trade form ───────────────────────────────────────────── */
+.form-section { max-width: 560px; }
+.section-heading {
+  font-size: 16px; font-weight: 600; color: var(--text);
+  margin-bottom: 4px; letter-spacing: -.02em;
+}
+.section-sub {
+  font-size: 13px; color: var(--muted); margin-bottom: 24px;
+}
+.info-box {
+  background: var(--gold-bg); border: 1px solid #fde68a;
+  border-left: 4px solid var(--gold);
+  border-radius: var(--radius-xs); padding: 14px 18px;
+  margin-bottom: 24px; font-size: 13px; color: #78350f; line-height: 1.7;
+}
+.info-box strong { color: var(--gold); }
+.info-box code {
+  background: #fef3c7; padding: 1px 6px; border-radius: 3px;
+  font-family: 'Courier New', monospace; font-size: 12px; color: #92400e;
+}
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: 1 / -1; }
+.form-label { font-size: 12px; font-weight: 600; color: var(--text); }
+.form-group input, .form-group select {
+  background: var(--surface); border: 1.5px solid var(--border);
+  color: var(--text); padding: 10px 14px; font-size: 14px;
+  font-family: inherit; border-radius: var(--radius-xs);
+  transition: border-color .15s, box-shadow .15s;
+}
+.form-group input:focus, .form-group select:focus {
+  outline: none; border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37,99,235,.12);
+}
+.form-group input::placeholder { color: var(--muted2); }
+.form-group select { cursor: pointer; }
+.type-toggle { display: flex; gap: 10px; }
+.type-btn {
+  flex: 1; padding: 10px; text-align: center;
+  border: 1.5px solid var(--border); cursor: pointer;
+  font-size: 13px; font-weight: 600; font-family: inherit;
+  background: var(--surface); color: var(--muted);
+  border-radius: var(--radius-xs); transition: all .15s;
+}
+.type-btn.buy.active {
+  background: var(--green-bg); border-color: var(--green);
+  color: var(--green); box-shadow: 0 0 0 3px rgba(22,163,74,.1);
+}
+.type-btn.sell.active {
+  background: var(--red-bg); border-color: var(--red);
+  color: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,.1);
+}
+.form-actions { display: flex; gap: 10px; margin-top: 8px; }
+.form-hint {
+  font-size: 12px; color: var(--muted); margin-top: 16px; line-height: 1.7;
+}
+.form-hint code {
+  background: var(--surface2); padding: 1px 6px; border-radius: 3px;
+  font-family: 'Courier New', monospace; font-size: 11px; color: var(--blue);
+}
+
+/* ── Spinner & toast ─────────────────────────────────────────── */
+.spinner {
+  display: inline-block; width: 12px; height: 12px;
+  border: 2px solid rgba(255,255,255,.3); border-top-color: white;
+  border-radius: 50%; animation: spin .6s linear infinite;
+  vertical-align: -2px; margin-right: 4px;
+}
+.btn-outline .spinner { border-color: rgba(37,99,235,.2); border-top-color: var(--accent); }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+#toast {
+  position: fixed; bottom: 24px; right: 24px;
+  background: var(--text); color: white;
+  padding: 12px 20px; border-radius: var(--radius-sm);
+  font-size: 13px; font-weight: 500;
+  opacity: 0; transition: opacity .25s, transform .25s;
+  transform: translateY(8px);
+  pointer-events: none; z-index: 9999; max-width: 340px;
+  box-shadow: var(--shadow-lg);
+}
+#toast.show { opacity: 1; transform: translateY(0); }
+#toast.success { background: var(--green); }
+#toast.error { background: var(--red); }
+
+/* ── Last updated badge ──────────────────────────────────────── */
+.updated-badge {
+  font-size: 12px; color: var(--muted); font-weight: 400;
+}
+
+/* ── Scrollbar ───────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--surface2); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .summary-grid { grid-template-columns: 1fr 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+  .form-group.full { grid-column: 1; }
+  nav { padding: 0 16px; }
+  .page { padding: 16px; }
+  .account-badge { display: none; }
+}
+@media (max-width: 480px) {
+  .summary-grid { grid-template-columns: 1fr; }
+  .stat-value { font-size: 20px; }
+  .ccy-toggle { display: none; }
+}
 </style>
 </head>
 <body>
+
 <div id="loadingBar"></div>
+
+<!-- ── Navigation ──────────────────────────────────────────── -->
 <nav>
-  <span class="logo">▸ PORTFOL/O</span>
+  <div class="logo">
+    <div class="logo-icon">T</div>
+    Tan Gim Suan
+  </div>
   <div class="nav-right">
-    <span class="import-badge">Tiger Brokers · SGP · 50867721</span>
-    <div class="market-status"><span class="status-dot" id="statusDot"></span><span id="marketStatus">Checking...</span></div>
+    <span class="account-badge">Tiger Brokers · SGP · 50867721</span>
+    <!-- Currency toggle pill -->
+    <div class="ccy-toggle">
+      <button class="ccy-btn active" id="ccyUSD" onclick="setCurrency('USD')">USD</button>
+      <button class="ccy-btn" id="ccySGD" onclick="setCurrency('SGD')">SGD</button>
+    </div>
+    <div class="market-pill">
+      <span class="status-dot" id="statusDot"></span>
+      <span id="marketStatus">Checking...</span>
+    </div>
   </div>
 </nav>
 
-<div class="summary">
-  <div class="stat"><div class="stat-label">Total Value (USD)</div><div class="stat-value" id="totalValue">$0.00</div></div>
-  <div class="stat"><div class="stat-label">Day Gain</div><div class="stat-value" id="dayGain">—</div></div>
-  <div class="stat"><div class="stat-label">Total Return</div><div class="stat-value" id="totalReturn">—</div></div>
-  <div class="stat"><div class="stat-label">Holdings</div><div class="stat-value" id="holdingsCount">0</div></div>
-</div>
+<!-- ── Page ────────────────────────────────────────────────── -->
+<div class="page">
 
-<div class="tabs">
-  <button class="tab active" onclick="showTab('portfolio')">Portfolio</button>
-  <button class="tab" onclick="showTab('transactions')">Transactions</button>
-  <button class="tab" onclick="showTab('add')">＋ Add Trade</button>
-</div>
-
-<div class="content">
-  <div class="panel active" id="panel-portfolio">
-    <div class="action-bar">
-      <div class="action-left">
-        <button class="btn accent" id="refreshBtn" onclick="refreshPrices()">↻ Load Prices</button>
-        <span class="last-updated" id="lastUpdated">Loading…</span>
-      </div>
-      <div style="font-size:11px;color:var(--muted)">SGD/USD <span id="fxRate">0.7893</span> &nbsp;·&nbsp; Prices updated daily via GitHub Actions</div>
+  <!-- Summary cards -->
+  <div class="summary-grid">
+    <div class="stat-card">
+      <div class="stat-label" id="labelTotalValue">Total Value (USD)</div>
+      <div class="stat-value" id="totalValue">$0.00</div>
+      <div class="stat-alt" id="altTotalValue"></div>
     </div>
-    <div id="portfolioContent"></div>
+    <div class="stat-card">
+      <div class="stat-label" id="labelDayGain">Day Gain / Loss</div>
+      <div class="stat-value" id="dayGain">—</div>
+      <div class="stat-alt" id="altDayGain"></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Return</div>
+      <div class="stat-value" id="totalReturn">—</div>
+      <div class="stat-alt" id="altTotalReturn"></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Holdings</div>
+      <div class="stat-value" id="holdingsCount">0</div>
+      <div class="stat-sub">Active positions</div>
+    </div>
   </div>
 
-  <div class="panel" id="panel-transactions">
-    <div id="transactionsContent"></div>
-  </div>
+  <!-- Main card -->
+  <div class="main-card">
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('portfolio')">
+        <span class="tab-icon">📊</span>Portfolio
+      </button>
+      <button class="tab" onclick="showTab('transactions')">
+        <span class="tab-icon">📋</span>Transactions
+      </button>
+      <button class="tab" onclick="showTab('add')">
+        <span class="tab-icon">＋</span>Add Trade
+      </button>
+    </div>
 
-  <div class="panel" id="panel-add">
-    <div class="form-section">
-      <div class="section-label">Record a Transaction</div>
-      <div class="info-box">
-        <strong>How prices update:</strong> A GitHub Actions workflow runs every weekday at 10:30 PM UTC (6:30 AM SGT) and commits fresh prices to <code>prices.json</code>. This page reads that file — no browser API calls, no CORS issues.<br>
-        To trigger a manual update, go to your repo → Actions → <em>Update Stock Prices</em> → Run workflow.
-      </div>
-      <form id="tradeForm" onsubmit="handleSubmit(event)">
-        <div class="form-grid">
-          <div class="form-group full">
-            <div class="form-label">Transaction Type</div>
-            <div class="type-toggle">
-              <button type="button" class="type-btn buy active" id="typeBuy" onclick="setType('buy')">BUY</button>
-              <button type="button" class="type-btn sell" id="typeSell" onclick="setType('sell')">SELL</button>
-            </div>
+    <!-- ── Portfolio panel ──────────────────────────────────── -->
+    <div class="panel active" id="panel-portfolio">
+      <div class="panel-inner">
+        <div class="action-bar">
+          <div class="action-left">
+            <button class="btn btn-primary" id="refreshBtn" onclick="refreshPrices()">
+              ↻ Refresh Prices
+            </button>
+            <span class="updated-badge" id="lastUpdated">Loading…</span>
           </div>
-          <div class="form-group">
-            <label class="form-label" for="fTicker">Ticker Symbol</label>
-            <input id="fTicker" type="text" placeholder="e.g. AAPL or D05.SI" required oninput="this.value=this.value.toUpperCase()">
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="fCurrency">Currency</label>
-            <select id="fCurrency"><option value="USD">USD — US Stocks</option><option value="SGD">SGD — SG Stocks</option></select>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="fDate">Trade Date</label>
-            <input id="fDate" type="date" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="fShares">Number of Shares</label>
-            <input id="fShares" type="number" placeholder="e.g. 10" min="0.0001" step="any" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="fPrice">Price per Share</label>
-            <input id="fPrice" type="number" placeholder="e.g. 189.42" min="0" step="any" required>
-          </div>
-          <div class="form-group full">
-            <div class="form-actions">
-              <button type="submit" class="btn accent">Add Transaction</button>
-              <button type="button" class="btn" onclick="resetForm()">Clear</button>
-            </div>
-            <div class="form-hint">
-              To add a new ticker, also add it to the <code>TICKERS</code> list in <code>update_prices.py</code> so it gets fetched.<br>
-              Transaction dates for Tiger-imported holdings are approximate (statement end date).
-            </div>
+          <div class="action-right">
+            SGD/USD <strong><span id="fxRate">0.7893</span></strong>
+            &nbsp;·&nbsp; Updated daily via GitHub Actions
           </div>
         </div>
-      </form>
+        <div id="portfolioContent"></div>
+      </div>
     </div>
-  </div>
-</div>
+
+    <!-- ── Transactions panel ───────────────────────────────── -->
+    <div class="panel" id="panel-transactions">
+      <div class="panel-inner">
+        <div id="transactionsContent"></div>
+      </div>
+    </div>
+
+    <!-- ── Add trade panel ──────────────────────────────────── -->
+    <div class="panel" id="panel-add">
+      <div class="panel-inner">
+        <div class="form-section">
+          <div class="section-heading">Record a Trade</div>
+          <div class="section-sub">Log a buy or sell transaction to your portfolio</div>
+
+          <div class="info-box">
+            <strong>How prices update:</strong> A GitHub Actions workflow runs every weekday at
+            10:30 PM UTC (6:30 AM SGT) and commits fresh prices to <code>prices.json</code>.
+            This page reads that file — no browser API calls, no CORS issues.<br>
+            To trigger a manual update: repo → Actions → <em>Update Stock Prices</em> → Run workflow.
+          </div>
+
+          <form id="tradeForm" onsubmit="handleSubmit(event)">
+            <div class="form-grid">
+
+              <div class="form-group full">
+                <div class="form-label">Transaction Type</div>
+                <div class="type-toggle">
+                  <button type="button" class="type-btn buy active" id="typeBuy" onclick="setType('buy')">
+                    ▲ Buy
+                  </button>
+                  <button type="button" class="type-btn sell" id="typeSell" onclick="setType('sell')">
+                    ▼ Sell
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="fTicker">Ticker Symbol</label>
+                <input id="fTicker" type="text" placeholder="e.g. AAPL or D05.SI"
+                       required oninput="this.value=this.value.toUpperCase()">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="fCurrency">Currency</label>
+                <select id="fCurrency">
+                  <option value="USD">USD — US Stocks</option>
+                  <option value="SGD">SGD — SG Stocks</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="fDate">Trade Date</label>
+                <input id="fDate" type="date" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="fShares">Number of Shares</label>
+                <input id="fShares" type="number" placeholder="e.g. 10"
+                       min="0.0001" step="any" required>
+              </div>
+
+              <div class="form-group full">
+                <label class="form-label" for="fPrice">Price per Share</label>
+                <input id="fPrice" type="number" placeholder="e.g. 189.42"
+                       min="0" step="any" required>
+              </div>
+
+              <div class="form-group full">
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary">Add Transaction</button>
+                  <button type="button" class="btn btn-outline" onclick="resetForm()">Clear</button>
+                </div>
+                <div class="form-hint">
+                  To add a new ticker, also add it to the <code>TICKERS</code> list in
+                  <code>update_prices.py</code> so prices are fetched automatically.<br>
+                  Transaction dates for Tiger-imported holdings are approximate (statement end date).
+                </div>
+              </div>
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main-card -->
+</div><!-- /page -->
 
 <div id="toast"></div>
 
 <script>
-// ── Constants ────────────────────────────────────────────────────
-const TX_KEY      = 'portv2_transactions';
-const PRICE_KEY   = 'portv2_prices';
+// ── Constants ──────────────────────────────────────────────────
+const TX_KEY    = 'portv2_transactions';
+const PRICE_KEY = 'portv2_prices';
 
 // ── Tiger Brokers seed data (statement 2026-05-01 to 2026-05-10) ─
 const TIGER_SEED = [
@@ -228,18 +587,63 @@ const TICKER_NAMES = {
   AAPL:'Apple Inc.', AMZN:'Amazon.com', CQQQ:'Invesco China Tech ETF',
   GOOGL:'Alphabet Inc.', LKNCY:'Luckin Coffee', NVDA:'NVIDIA Corp.',
   SPY:'SPDR S&P 500 ETF', TSM:'Taiwan Semiconductor', VOO:'Vanguard S&P 500 ETF',
-  'AJBU.SI':'Keppel DC Reit', 'D05.SI':'DBS Group',
+  'AJBU.SI':'Keppel DC REIT', 'D05.SI':'DBS Group',
   'ME8U.SI':'Mapletree Ind Tr', 'N2IU.SI':'Mapletree PanAsia Com Tr'
 };
 
-// ── State ────────────────────────────────────────────────────────
+// ── State ──────────────────────────────────────────────────────
 let tradeType    = 'buy';
 let cachedPrices = {};
-let sgdUsdRate   = 0.78931;
+let sgdUsdRate   = 0.78931;   // 1 SGD = 0.78931 USD
 let loading      = false;
+let displayCcy   = 'USD';     // active display currency for summary cards
 
-// ── Storage ──────────────────────────────────────────────────────
-const getTx  = () => JSON.parse(localStorage.getItem(TX_KEY)   || '[]');
+// ── Currency conversion ────────────────────────────────────────
+// All internal values are stored in each stock's native currency (USD or SGD).
+// Summary totals are first converted to USD, then optionally to SGD for display.
+function usdToSgd(usd) { return usd / sgdUsdRate; }   // e.g. $1 USD → S$1.267
+function sgdToUsd(sgd) { return sgd * sgdUsdRate; }   // e.g. S$1 → $0.789
+
+// Format a USD-denominated amount in the currently selected display currency.
+function fmtDisplay(usdAmount) {
+  if (usdAmount == null || isNaN(usdAmount)) return '—';
+  if (displayCcy === 'SGD') {
+    const sgd = usdToSgd(usdAmount);
+    return (sgd < 0 ? '-' : '') + 'S$' + Math.abs(sgd).toLocaleString('en-US', { minimumFractionDigits:2, maximumFractionDigits:2 });
+  }
+  return (usdAmount < 0 ? '-' : '') + '$' + Math.abs(usdAmount).toLocaleString('en-US', { minimumFractionDigits:2, maximumFractionDigits:2 });
+}
+
+// Show a signed display-currency amount (e.g. for gains).
+function fmtDisplaySigned(usdAmount) {
+  if (usdAmount == null || isNaN(usdAmount)) return '—';
+  const prefix = usdAmount >= 0 ? '+' : '';
+  return prefix + fmtDisplay(usdAmount);
+}
+
+// Produce the alternate-currency equivalent label beneath a summary value.
+function fmtAlt(usdAmount) {
+  if (usdAmount == null || isNaN(usdAmount)) return '';
+  if (displayCcy === 'USD') {
+    const sgd = usdToSgd(Math.abs(usdAmount));
+    const sign = usdAmount < 0 ? '-' : '';
+    return '≈ ' + sign + 'S$' + sgd.toLocaleString('en-US', { minimumFractionDigits:2, maximumFractionDigits:2 });
+  } else {
+    const sign = usdAmount < 0 ? '-' : '';
+    return '≈ ' + sign + '$' + Math.abs(usdAmount).toLocaleString('en-US', { minimumFractionDigits:2, maximumFractionDigits:2 }) + ' USD';
+  }
+}
+
+// Switch display currency and re-render.
+function setCurrency(ccy) {
+  displayCcy = ccy;
+  document.getElementById('ccyUSD').classList.toggle('active', ccy === 'USD');
+  document.getElementById('ccySGD').classList.toggle('active', ccy === 'SGD');
+  renderPortfolio();
+}
+
+// ── Storage ────────────────────────────────────────────────────
+const getTx  = () => JSON.parse(localStorage.getItem(TX_KEY)  || '[]');
 const saveTx = d  => localStorage.setItem(TX_KEY, JSON.stringify(d));
 const getPx  = () => { try { return JSON.parse(localStorage.getItem(PRICE_KEY)||'{}'); } catch { return {}; } };
 const savePx = d  => localStorage.setItem(PRICE_KEY, JSON.stringify(d));
@@ -249,9 +653,8 @@ function seedTigerData() {
   saveTx(TIGER_SEED);
 }
 
-// ── Load prices from prices.json (GitHub Pages / local file) ─────
+// ── Load prices.json ───────────────────────────────────────────
 async function loadPricesJSON() {
-  // Cache-bust so browser always gets the latest file from the server
   const url = './prices.json?_=' + Date.now();
   const res = await fetch(url, { cache: 'no-store' });
   if (!res.ok) throw new Error(`prices.json returned ${res.status}`);
@@ -266,7 +669,7 @@ async function refreshPrices() {
   setLoadingBar(true);
   const btn = document.getElementById('refreshBtn');
   btn.disabled = true;
-  document.getElementById('lastUpdated').innerHTML = '<span class="spinner"></span>Loading prices…';
+  document.getElementById('lastUpdated').innerHTML = '<span class="spinner"></span>Fetching prices…';
 
   try {
     const data    = await loadPricesJSON();
@@ -277,14 +680,14 @@ async function refreshPrices() {
 
     const ts = data.lastUpdated ? new Date(data.lastUpdated) : new Date();
     document.getElementById('lastUpdated').textContent =
-      `Prices as of ${ts.toLocaleDateString()} ${ts.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;
+      `Updated ${ts.toLocaleDateString()} at ${ts.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;
 
-    toast('Prices loaded successfully.', 'success');
+    toast('Prices refreshed successfully', 'success');
     renderPortfolio();
   } catch (err) {
     console.warn('prices.json failed:', err.message);
-    document.getElementById('lastUpdated').textContent = 'prices.json not available yet — run the GitHub Action first';
-    toast('Could not load prices.json. Has the GitHub Action run yet?', 'error');
+    document.getElementById('lastUpdated').textContent = 'Prices unavailable — run the GitHub Action first';
+    toast('Could not load prices.json. Run the GitHub Action to fetch prices.', 'error');
   } finally {
     loading = false;
     setLoadingBar(false);
@@ -292,7 +695,7 @@ async function refreshPrices() {
   }
 }
 
-// ── Portfolio computation (average cost) ─────────────────────────
+// ── Portfolio computation (average cost method) ────────────────
 function computePortfolio() {
   const txns = [...getTx()].sort((a,b) => new Date(a.date)-new Date(b.date));
   const h = {};
@@ -313,7 +716,7 @@ function computePortfolio() {
   return Object.fromEntries(Object.entries(h).filter(([,v]) => v.shares > 0.00001));
 }
 
-// ── Formatting ───────────────────────────────────────────────────
+// ── Formatting helpers ─────────────────────────────────────────
 const fmtN  = (n,d=2) => n==null||isNaN(n)?'—':n.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
 const fmtU  = n => n==null||isNaN(n)?'—':(n<0?'-':'')+'$'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
 const fmtC  = (n,c) => n==null||isNaN(n)?'—':(n<0?'-':'')+(c==='SGD'?'S$':'$')+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -321,13 +724,19 @@ const fmtP  = n => n==null||isNaN(n)?'—':(n>=0?'+':'')+n.toFixed(2)+'%';
 const gc    = n => !n||n===0?'':(n>0?'up':'dn');
 const toUSD = (n,c) => c==='SGD' ? n*sgdUsdRate : n;
 
-// ── Render portfolio ─────────────────────────────────────────────
+// ── Render portfolio ───────────────────────────────────────────
 function renderPortfolio() {
   const portfolio = computePortfolio();
-  const el        = document.getElementById('portfolioContent');
+  const el = document.getElementById('portfolioContent');
 
   if (!Object.keys(portfolio).length) {
-    el.innerHTML = `<div class="empty"><div class="empty-icon">◈</div><div class="empty-title">No holdings yet</div><div class="empty-sub">Add your first trade</div><div class="empty-btn"><button class="btn accent" onclick="showTab('add')">＋ Add Trade</button></div></div>`;
+    el.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">📈</div>
+        <div class="empty-title">No holdings yet</div>
+        <div class="empty-sub">Add your first trade to start tracking your portfolio</div>
+        <button class="btn btn-primary" onclick="showTab('add')">＋ Add Trade</button>
+      </div>`;
     updateSummary(null); return;
   }
 
@@ -360,17 +769,38 @@ function renderPortfolio() {
       if (h.totalCost) gCost += h.totalCost;
       if (dayGain)     gDay  += dayGain;
 
-      const pxCell  = curPx  != null ? fmtC(curPx,cur)  : `<span class="muted">—</span>`;
-      const dayCell = dayGain != null ? `<span class="${gc(dayGain)}">${dayGain>=0?'+':''}${fmtC(dayGain,cur)} (${fmtP(px.changePct)})</span>` : `<span class="muted">—</span>`;
+      const pxCell  = curPx   != null ? fmtC(curPx,cur) : `<span class="muted">—</span>`;
+      const dayCell = dayGain != null
+        ? `<span class="${gc(dayGain)}">${dayGain>=0?'+':''}${fmtC(dayGain,cur)}<br><small>${fmtP(px.changePct)}</small></span>`
+        : `<span class="muted">—</span>`;
       const mvCell  = mktVal  != null ? fmtC(mktVal,cur) : `<span class="muted">—</span>`;
-      const glCell  = unrlzd  != null ? `<span class="${gc(unrlzd)}">${unrlzd>=0?'+':''}${fmtC(unrlzd,cur)}</span>` : `<span class="muted">—</span>`;
-      const pctCell = unPct   != null ? `<span class="${gc(unPct)}">${fmtP(unPct)}</span>` : `<span class="muted">—</span>`;
-      const usdEqv  = (cur==='SGD' && mktVal!=null) ? `<div class="usd-equiv">≈ ${fmtU(mktVal*sgdUsdRate)}</div>` : '';
+      const glCell  = unrlzd  != null
+        ? `<span class="${gc(unrlzd)}">${unrlzd>=0?'+':''}${fmtC(unrlzd,cur)}</span>`
+        : `<span class="muted">—</span>`;
+      const pctCell = unPct   != null
+        ? `<span class="${gc(unPct)}">${fmtP(unPct)}</span>`
+        : `<span class="muted">—</span>`;
+
+      // Show cross-currency equivalent in the market value cell
+      let xEquiv = '';
+      if (cur === 'SGD' && mktVal != null) {
+        xEquiv = `<div class="usd-equiv">≈ ${fmtU(toUSD(mktVal,'SGD'))}</div>`;
+      } else if (cur === 'USD' && mktVal != null) {
+        xEquiv = `<div class="usd-equiv">≈ S$${fmtN(usdToSgd(mktVal))}</div>`;
+      }
 
       return `<tr>
-        <td><span class="ticker-cell">${ticker}</span><div class="name-cell">${name}</div></td>
-        <td>${sStr}</td><td>${fmtC(avgCost,cur)}</td><td>${pxCell}</td>
-        <td>${dayCell}</td><td>${mvCell}${usdEqv}</td><td>${glCell}</td><td>${pctCell}</td>
+        <td>
+          <div class="ticker-cell">${ticker}</div>
+          <div class="name-cell">${name}</div>
+        </td>
+        <td>${sStr}</td>
+        <td>${fmtC(avgCost,cur)}</td>
+        <td>${pxCell}</td>
+        <td>${dayCell}</td>
+        <td>${mvCell}${xEquiv}</td>
+        <td>${glCell}</td>
+        <td>${pctCell}</td>
       </tr>`;
     }).join('');
 
@@ -378,26 +808,36 @@ function renderPortfolio() {
     totalCostUSD += toUSD(gCost, cur);
     totalDayUSD  += toUSD(gDay,  cur);
 
-    const sym  = cur==='SGD' ? 'S$' : '$';
+    const sym   = cur==='SGD' ? 'S$' : '$';
     const glTot = gVal - gCost;
+    const glClass = gc(glTot);
 
-    html += `<div class="currency-group">
-      <div class="currency-header">
-        <span class="currency-label ${cur.toLowerCase()}">${cur}</span>
-        <span class="currency-total">
-          Value: ${sym}${fmtN(gVal)} &nbsp;|&nbsp;
-          G/L: <span class="${gc(glTot)}">${glTot>=0?'+':''}${sym}${fmtN(Math.abs(glTot))}</span>
-          ${cur==='SGD' ? `&nbsp;|&nbsp; ≈ ${fmtU(toUSD(gVal,'SGD'))} USD` : ''}
-        </span>
-      </div>
-      <div class="table-wrap"><table>
-        <thead><tr>
-          <th style="text-align:left">Ticker</th><th>Shares</th><th>Avg Cost</th>
-          <th>Price</th><th>Day Gain</th><th>Mkt Value</th><th>Unrlzd G/L</th><th>Return %</th>
-        </tr></thead>
-        <tbody>${rows}</tbody>
-      </table></div>
-    </div>`;
+    html += `
+      <div class="currency-group">
+        <div class="currency-header">
+          <span class="currency-label ${cur.toLowerCase()}">${cur}</span>
+          <span class="currency-total">
+            Value: <strong>${sym}${fmtN(gVal)}</strong>
+            &nbsp;&nbsp;G/L: <strong class="${glClass}">${glTot>=0?'+':''}${sym}${fmtN(Math.abs(glTot))}</strong>
+            ${cur==='SGD' ? `&nbsp;&nbsp;≈ <strong>${fmtU(toUSD(gVal,'SGD'))}</strong> USD` : `&nbsp;&nbsp;≈ <strong>S$${fmtN(usdToSgd(gVal))}</strong> SGD`}
+          </span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th style="text-align:left">Ticker</th>
+              <th>Shares</th>
+              <th>Avg Cost</th>
+              <th>Price</th>
+              <th>Day G/L</th>
+              <th>Mkt Value</th>
+              <th>Unrlzd G/L</th>
+              <th>Return</th>
+            </tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      </div>`;
   }
 
   el.innerHTML = html;
@@ -406,59 +846,94 @@ function renderPortfolio() {
 
 function updateSummary(data) {
   document.getElementById('holdingsCount').textContent = Object.keys(computePortfolio()).length;
+
+  // Update label to show current display currency
+  const ccyLabel = displayCcy === 'SGD' ? 'SGD' : 'USD';
+  document.getElementById('labelTotalValue').textContent = `Total Value (${ccyLabel})`;
+  document.getElementById('labelDayGain').textContent    = `Day Gain / Loss (${ccyLabel})`;
+
   if (!data || !data.totalValUSD) {
-    document.getElementById('totalValue').textContent = '$0.00';
-    document.getElementById('totalValue').className   = 'stat-value';
-    document.getElementById('dayGain').textContent    = '—';
-    document.getElementById('dayGain').className      = 'stat-value';
-    document.getElementById('totalReturn').textContent= '—';
-    document.getElementById('totalReturn').className  = 'stat-value';
+    ['totalValue','dayGain','totalReturn'].forEach(id => {
+      document.getElementById(id).textContent = '—';
+      document.getElementById(id).className = 'stat-value';
+    });
+    ['altTotalValue','altDayGain','altTotalReturn'].forEach(id => {
+      document.getElementById(id).textContent = '';
+    });
     return;
   }
+
   const { totalValUSD, totalCostUSD, totalDayUSD } = data;
   const ret    = totalValUSD - totalCostUSD;
   const retPct = totalCostUSD > 0 ? (ret/totalCostUSD)*100 : 0;
 
-  document.getElementById('totalValue').textContent = fmtU(totalValUSD);
+  // Total Value
+  document.getElementById('totalValue').textContent = fmtDisplay(totalValUSD);
   document.getElementById('totalValue').className   = 'stat-value';
+  document.getElementById('altTotalValue').textContent = fmtAlt(totalValUSD);
 
+  // Day Gain
   const dg = document.getElementById('dayGain');
-  dg.textContent = totalDayUSD ? `${totalDayUSD>=0?'+':''}${fmtU(totalDayUSD)}` : '—';
-  dg.className   = 'stat-value ' + gc(totalDayUSD);
+  if (totalDayUSD) {
+    dg.textContent = fmtDisplaySigned(totalDayUSD);
+    dg.className   = 'stat-value ' + gc(totalDayUSD);
+    document.getElementById('altDayGain').textContent = fmtAlt(totalDayUSD);
+  } else {
+    dg.textContent = '—';
+    dg.className   = 'stat-value';
+    document.getElementById('altDayGain').textContent = '';
+  }
 
+  // Total Return
   const tr = document.getElementById('totalReturn');
-  tr.textContent = `${ret>=0?'+':''}${fmtU(ret)} (${fmtP(retPct)})`;
+  tr.textContent = `${fmtDisplaySigned(ret)} (${fmtP(retPct)})`;
   tr.className   = 'stat-value ' + gc(ret);
+  document.getElementById('altTotalReturn').textContent = fmtAlt(ret);
 }
 
-// ── Render transactions ──────────────────────────────────────────
+// ── Render transactions ────────────────────────────────────────
 function renderTransactions() {
   const txns = getTx();
   const el   = document.getElementById('transactionsContent');
+
   if (!txns.length) {
-    el.innerHTML = `<div class="empty"><div class="empty-icon">≡</div><div class="empty-title">No transactions yet</div></div>`;
+    el.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">📋</div>
+        <div class="empty-title">No transactions yet</div>
+        <div class="empty-sub">Your trade history will appear here</div>
+      </div>`;
     return;
   }
+
   const sorted = [...txns].sort((a,b) => new Date(b.date)-new Date(a.date) || b.id-a.id);
-  const cur = tx => tx.currency || 'USD';
-  const sym = tx => cur(tx)==='SGD' ? 'S$' : '$';
+  const cur    = tx => tx.currency || 'USD';
+  const sym    = tx => cur(tx) === 'SGD' ? 'S$' : '$';
+
   const rows = sorted.map(tx => {
     const total = Number(tx.shares) * Number(tx.price);
-    const s     = Number(tx.shares)%1<0.0001 ? fmtN(Number(tx.shares),0) : fmtN(Number(tx.shares),4);
+    const s     = Number(tx.shares)%1 < 0.0001 ? fmtN(Number(tx.shares),0) : fmtN(Number(tx.shares),4);
     return `<div class="tx-row">
       <span class="tx-type-${tx.type}">${tx.type.toUpperCase()}</span>
-      <span style="color:var(--blue);font-weight:700">${tx.ticker}</span>
+      <span style="font-weight:600;color:var(--text)">${tx.ticker}</span>
       <span class="muted">${tx.date}</span>
       <span>${s}</span>
       <span>${sym(tx)}${fmtN(Number(tx.price))}</span>
-      <span>${sym(tx)}${fmtN(total)}</span>
+      <span style="font-weight:600">${sym(tx)}${fmtN(total)}</span>
       <span><span class="cur-badge ${cur(tx).toLowerCase()}">${cur(tx)}</span></span>
-      <button class="del-btn" onclick="deleteTx(${tx.id})" title="Delete">✕</button>
+      <button class="del-btn" onclick="deleteTx(${tx.id})" title="Delete transaction">×</button>
     </div>`;
   }).join('');
-  el.innerHTML = `<div class="tx-wrap">
-    <div class="tx-head"><span>Type</span><span>Ticker</span><span>Date</span><span>Shares</span><span>Price</span><span>Total</span><span>Cur</span><span></span></div>
-    ${rows}</div>`;
+
+  el.innerHTML = `
+    <div class="tx-wrap">
+      <div class="tx-head">
+        <span>Type</span><span>Ticker</span><span>Date</span>
+        <span>Shares</span><span>Price</span><span>Total</span>
+        <span>Ccy</span><span></span>
+      </div>
+      ${rows}
+    </div>`;
 }
 
 function renderAll() {
@@ -468,14 +943,14 @@ function renderAll() {
   renderTransactions();
 }
 
-// ── Tabs ─────────────────────────────────────────────────────────
+// ── Tabs ───────────────────────────────────────────────────────
 function showTab(name) {
   const names = ['portfolio','transactions','add'];
   document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', names[i]===name));
   document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id==='panel-'+name));
 }
 
-// ── Form ─────────────────────────────────────────────────────────
+// ── Form ───────────────────────────────────────────────────────
 function setType(type) {
   tradeType = type;
   document.getElementById('typeBuy').classList.toggle('active',  type==='buy');
@@ -489,12 +964,17 @@ function handleSubmit(e) {
   const date     = document.getElementById('fDate').value;
   const shares   = parseFloat(document.getElementById('fShares').value);
   const price    = parseFloat(document.getElementById('fPrice').value);
+
   if (!ticker||!date||isNaN(shares)||isNaN(price)) { toast('Please fill in all fields.','error'); return; }
   if (shares<=0||price<0) { toast('Shares must be positive.','error'); return; }
+
   if (tradeType==='sell') {
     const p = computePortfolio(), h = p[ticker];
-    if (!h||h.shares<shares) { toast(`Cannot sell ${shares} ${ticker} — you hold ${h?fmtN(h.shares,4):0}.`,'error'); return; }
+    if (!h||h.shares<shares) {
+      toast(`Cannot sell ${shares} ${ticker} — you hold ${h?fmtN(h.shares,4):0}.`,'error'); return;
+    }
   }
+
   const txns = getTx();
   txns.push({ id:Date.now(), type:tradeType, ticker, date, shares, price, currency });
   saveTx(txns);
@@ -516,32 +996,36 @@ function deleteTx(id) {
   toast('Transaction deleted.','success'); renderAll();
 }
 
-// ── Utility ──────────────────────────────────────────────────────
+// ── Utility ────────────────────────────────────────────────────
 function toast(msg, type='success') {
   const el = document.getElementById('toast');
   el.textContent = msg; el.className = `show ${type}`;
   clearTimeout(el._t); el._t = setTimeout(() => el.className='', 3500);
 }
+
 function setLoadingBar(on) {
   const bar = document.getElementById('loadingBar');
   bar.style.width = on ? '75%' : '100%';
-  if (!on) setTimeout(()=>{ bar.style.transition='none'; bar.style.width='0'; setTimeout(()=>bar.style.transition='width .4s',50); },300);
+  if (!on) setTimeout(()=>{
+    bar.style.transition='none'; bar.style.width='0';
+    setTimeout(()=>bar.style.transition='width .4s',50);
+  },300);
 }
+
 function updateMarketStatus() {
   const now=new Date(), d=now.getDay(), m=now.getHours()*60+now.getMinutes();
   const open = d>=1&&d<=5&&m>=570&&m<960;
   document.getElementById('statusDot').className = 'status-dot'+(open?'':' closed');
-  document.getElementById('marketStatus').textContent = open ? 'NYSE · Market Open' : 'Market Closed';
+  document.getElementById('marketStatus').textContent = open ? 'NYSE · Open' : 'Market Closed';
 }
 
-// ── Init ─────────────────────────────────────────────────────────
+// ── Init ───────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   seedTigerData();
   document.getElementById('fDate').valueAsDate = new Date();
   cachedPrices = getPx();
   updateMarketStatus();
   renderAll();
-  // Auto-load prices.json on startup
   refreshPrices();
   setInterval(updateMarketStatus, 60000);
 });
