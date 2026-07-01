@@ -1,84 +1,84 @@
 {
-  "lastUpdated": "2026-06-30T23:45:29Z",
-  "sgdUsdRate": 0.77281,
+  "lastUpdated": "2026-07-01T23:52:16Z",
+  "sgdUsdRate": 0.7718,
   "prices": {
     "AAPL": {
-      "price": 289.36,
-      "change": 7.62,
-      "changePct": 2.7046,
-      "ts": 1782863129726
+      "price": 294.38,
+      "change": 5.02,
+      "changePct": 1.7349,
+      "ts": 1782949936371
     },
     "AMZN": {
-      "price": 238.34,
-      "change": -1.8,
-      "changePct": -0.7496,
-      "ts": 1782863129726
+      "price": 241.7,
+      "change": 3.36,
+      "changePct": 1.4098,
+      "ts": 1782949936372
     },
     "CQQQ": {
-      "price": 57.03,
-      "change": 1.62,
-      "changePct": 2.9237,
-      "ts": 1782863129727
+      "price": 56.99,
+      "change": -0.04,
+      "changePct": -0.0701,
+      "ts": 1782949936372
     },
     "GOOGL": {
-      "price": 357.37,
-      "change": 3.72,
-      "changePct": 1.0519,
-      "ts": 1782863129727
+      "price": 361.21,
+      "change": 3.84,
+      "changePct": 1.0745,
+      "ts": 1782949936373
     },
     "LKNCY": {
-      "price": 28.1,
-      "change": 0.0,
-      "changePct": 0.0,
-      "ts": 1782863129728
+      "price": 29.1,
+      "change": 1.43,
+      "changePct": 5.1681,
+      "ts": 1782949936373
     },
     "NVDA": {
-      "price": 200.09,
-      "change": 5.12,
-      "changePct": 2.626,
-      "ts": 1782863129728
+      "price": 197.58,
+      "change": -2.51,
+      "changePct": -1.2544,
+      "ts": 1782949936374
     },
     "SPY": {
-      "price": 746.77,
-      "change": 5.77,
-      "changePct": 0.7787,
-      "ts": 1782863129728
+      "price": 745.76,
+      "change": -1.01,
+      "changePct": -0.1353,
+      "ts": 1782949936374
     },
     "TSM": {
-      "price": 477.57,
-      "change": 22.47,
-      "changePct": 4.9374,
-      "ts": 1782863129729
+      "price": 444.23,
+      "change": -33.34,
+      "changePct": -6.9812,
+      "ts": 1782949936375
     },
     "VOO": {
-      "price": 686.81,
-      "change": 5.8,
-      "changePct": 0.8517,
-      "ts": 1782863129729
+      "price": 685.46,
+      "change": -1.35,
+      "changePct": -0.1966,
+      "ts": 1782949936375
     },
     "AJBU.SI": {
       "price": 2.24,
-      "change": -0.02,
-      "changePct": -0.885,
-      "ts": 1782863129729
+      "change": 0.0,
+      "changePct": 0.0,
+      "ts": 1782949936376
     },
     "D05.SI": {
-      "price": 65.4,
-      "change": -0.63,
-      "changePct": -0.9541,
-      "ts": 1782863129730
+      "price": 65.43,
+      "change": 0.03,
+      "changePct": 0.0459,
+      "ts": 1782949936376
     },
     "ME8U.SI": {
       "price": 1.92,
-      "change": -0.02,
-      "changePct": -1.0309,
-      "ts": 1782863129730
+      "change": 0.0,
+      "changePct": 0.0,
+      "ts": 1782949936377
     },
     "N2IU.SI": {
-      "price": 1.29,
+      "price": 1.28,
       "change": -0.01,
-      "changePct": -0.7692,
-      "ts": 1782863129730
+      "changePct": -0.7752,
+      "ts": 1782949936377
     }
   }
 }
