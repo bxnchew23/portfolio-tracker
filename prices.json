@@ -1,84 +1,84 @@
 {
-  "lastUpdated": "2026-09-18T00:42:43Z",
-  "sgdUsdRate": 0.78369,
+  "lastUpdated": "2026-09-19T00:31:39Z",
+  "sgdUsdRate": 0.78388,
   "prices": {
     "AAPL": {
-      "price": 332.41,
+      "price": 337.0,
       "change": 0.0,
       "changePct": 0.0,
-      "ts": 1789692163665
+      "ts": 1789777899020
     },
     "AMZN": {
-      "price": 245.96,
+      "price": 251.19,
       "change": 0.0,
       "changePct": 0.0,
-      "ts": 1789692163666
+      "ts": 1789777899020
     },
     "CQQQ": {
-      "price": 46.18,
+      "price": 46.27,
       "change": 0.0,
       "changePct": 0.0,
-      "ts": 1789692163666
+      "ts": 1789777899021
     },
     "GOOGL": {
-      "price": 342.87,
+      "price": 347.33,
       "change": 0.0,
       "changePct": 0.0,
-      "ts": 1789692163666
+      "ts": 1789777899021
     },
     "LKNCY": {
-      "price": 33.64,
-      "change": -0.4,
-      "changePct": -1.1751,
-      "ts": 1789692163667
+      "price": 34.59,
+      "change": 0.95,
+      "changePct": 2.824,
+      "ts": 1789777899021
     },
     "NVDA": {
-      "price": 213.9,
+      "price": 219.34,
       "change": 0.0,
       "changePct": 0.0,
-      "ts": 1789692163667
+      "ts": 1789777899022
     },
     "SPY": {
-      "price": 754.05,
+      "price": 762.6,
       "change": 0.0,
       "changePct": 0.0,
-      "ts": 1789692163667
+      "ts": 1789777899022
     },
     "TSM": {
-      "price": 417.72,
+      "price": 430.26,
       "change": 0.0,
       "changePct": 0.0,
-      "ts": 1789692163668
+      "ts": 1789777899023
     },
     "VOO": {
-      "price": 693.24,
+      "price": 701.03,
       "change": 0.0,
       "changePct": 0.0,
-      "ts": 1789692163668
+      "ts": 1789777899023
     },
     "AJBU.SI": {
-      "price": 2.12,
-      "change": 0.01,
-      "changePct": 0.4739,
-      "ts": 1789692163668
+      "price": 2.15,
+      "change": 0.03,
+      "changePct": 1.4151,
+      "ts": 1789777899024
     },
     "D05.SI": {
-      "price": 76.94,
-      "change": 0.14,
-      "changePct": 0.1823,
-      "ts": 1789692163669
+      "price": 76.86,
+      "change": -0.08,
+      "changePct": -0.104,
+      "ts": 1789777899024
     },
     "ME8U.SI": {
       "price": 1.91,
-      "change": 0.01,
-      "changePct": 0.5263,
-      "ts": 1789692163669
+      "change": 0.0,
+      "changePct": 0.0,
+      "ts": 1789777899025
     },
     "N2IU.SI": {
       "price": 1.21,
-      "change": 0.01,
-      "changePct": 0.8333,
-      "ts": 1789692163669
+      "change": 0.0,
+      "changePct": 0.0,
+      "ts": 1789777899025
     }
   }
 }
